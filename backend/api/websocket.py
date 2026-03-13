@@ -60,7 +60,8 @@ async def run_generation(db, project_id: str):
     messages = await get_project_messages(db, project_id)
     project_data = await get_or_create_project_data(db, project_id)
 
-    blueprint_content = await generate_blueprint(project_data, messages)
+    title = str(project_data.get("idea_summary") or "Project")[:60]
+    blueprint_content = await generate_blueprint(project_data, title)
     bp = Blueprint(id=str(uuid.uuid4()), project_id=project_id, content=blueprint_content)
     db.add(bp)
     await db.commit()

@@ -37,14 +37,23 @@ async def run_interview_chain(messages: list, extracted_data: dict, phase: str):
             else:
                 lc_messages.append(AIMessage(content=msg["content"]))
 
-        async for chunk in llm.astream({"input": lc_messages[-1].content if lc_messages else "", "chat_history": lc_messages[:-1], "phase": phase}):
+        async for chunk in llm.astream(lc_messages):
             token = chunk.content if hasattr(chunk, "content") else str(chunk)
             yield token
 
-    except Exception as e:
-        # Fallback: use ainvoke
+    except Exception:
+        # Fallback: use ainvoke with message list
         try:
-            result = await llm.ainvoke({"input": messages[-1]["content"] if messages else "", "chat_history": [], "phase": phase})
+            from langchain_core.messages import HumanMessage, SystemMessage
+            fallback_messages = [
+                SystemMessage(content=INTERVIEW_SYSTEM.format(
+                    extracted_data=str(extracted_data) if extracted_data else "nenhum dado coletado ainda",
+                    phase=phase
+                ))
+            ]
+            if messages:
+                fallback_messages.append(HumanMessage(content=messages[-1]["content"]))
+            result = await llm.ainvoke(fallback_messages)
             content = result.content if hasattr(result, "content") else str(result)
             for word in content.split(" "):
                 yield word + " "
