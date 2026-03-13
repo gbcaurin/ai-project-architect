@@ -5,6 +5,7 @@ from typing import Optional
 class Settings(BaseSettings):
     APP_NAME: str = "AI Project Architect"
     DEBUG: bool = False
+    PORT: int = 8000
 
     DATABASE_URL: str = "sqlite+aiosqlite:///./dev.db"
 
