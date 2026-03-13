@@ -1,6 +1,6 @@
 import json
 import re
-from langchain.prompts import ChatPromptTemplate
+from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.output_parsers import StrOutputParser
 from ai.llm_factory import get_llm
 
