@@ -36,3 +36,14 @@ app.include_router(ws_router)
 @app.get("/health")
 async def health():
     return {"status": "ok", "app": settings.APP_NAME}
+
+
+@app.get("/")
+async def root():
+    return {
+        "status": "ok",
+        "app": settings.APP_NAME,
+        "message": "Backend is running",
+        "docs_url": "/docs",
+        "health_url": "/health",
+    }
