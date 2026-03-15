@@ -1,10 +1,17 @@
-from pydantic import BaseModel
-from typing import Optional, List, Any
+from pydantic import BaseModel, EmailStr, field_validator
+from typing import Optional, List, Literal
 from datetime import datetime
 
 class RegisterRequest(BaseModel):
-    email: str
+    email: EmailStr  
     password: str
+
+    @field_validator("password")
+    @classmethod
+    def password_min_length(cls, v: str) -> str:
+        if len(v) < 6:
+            raise ValueError("Password must be at least 6 characters")
+        return v
 
 class LoginRequest(BaseModel):
     email: str
@@ -20,7 +27,7 @@ class ProjectCreate(BaseModel):
 
 class ProjectResponse(BaseModel):
     id: str
-    title: str
+    title: Optional[str] = None  
     status: str
     interview_phase: str
     created_at: datetime
@@ -40,4 +47,4 @@ class ProjectWithMessages(ProjectResponse):
     messages: List[MessageResponse] = []
 
 class GeneratePromptsRequest(BaseModel):
-    target_ai: str = "claude"
+    target_ai: Literal["claude", "cursor", "lovable", "gpt"] = "claude"
