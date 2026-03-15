@@ -34,8 +34,10 @@ class ProjectDetailResponse(BaseModel):
     title: Optional[str]
     status: str
     interview_phase: str
-    messages: list[MessageResponse]
+    messages: list[MessageResponse] = []  
     created_at: datetime
 
     class Config:
         from_attributes = True
+
+

@@ -8,20 +8,30 @@ from models import User
 from models import Project
 from schemas.project import ProjectCreate, ProjectResponse, ProjectDetailResponse
 
+
 router = APIRouter(prefix="/api/projects", tags=["projects"])
 
 
-@router.get("", response_model=list[ProjectResponse])
-async def list_projects(
+@router.get("/{project_id}", response_model=ProjectDetailResponse)
+async def get_project(
+    project_id: str,
     user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db)
 ):
     result = await db.execute(
         select(Project)
-        .where(Project.user_id == user.id)
-        .order_by(Project.created_at.desc())
+        .where(Project.id == project_id, Project.user_id == user.id)
+        .options(selectinload(Project.messages))
     )
-    return result.scalars().all()
+    project = result.scalar_one_or_none()
+    if not project:
+        raise HTTPException(status_code=404, detail="Project not found")
+
+    # força lista vazia se o relacionamento não carregou
+    if not hasattr(project, 'messages') or project.messages is None:
+        project.messages = []
+
+    return project
 
 
 @router.post("", response_model=ProjectResponse)
