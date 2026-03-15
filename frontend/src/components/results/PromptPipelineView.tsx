@@ -32,7 +32,6 @@ export function PromptPipelineView({ selectedAI, onSelectAI, pipeline, isGenerat
                 : 'border-white/8 text-gray-500 hover:text-gray-300 hover:border-white/15'
             }`}
           >
-            <span>{tool.emoji}</span>
             {tool.label}
           </button>
         ))}
@@ -45,7 +44,6 @@ export function PromptPipelineView({ selectedAI, onSelectAI, pipeline, isGenerat
         </div>
       ) : !pipeline ? (
         <div className="flex flex-col items-center justify-center h-48 gap-4 text-center">
-          <div className="text-4xl">✨</div>
           <p className="text-sm text-gray-400 font-medium">Nenhum prompt ainda para {selectedAI}</p>
           <button
             onClick={() => onGenerate(selectedAI)}

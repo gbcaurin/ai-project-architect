@@ -12,9 +12,9 @@ interface Props {
 }
 
 const TABS = [
-  { id: 'blueprint', label: 'Blueprint', emoji: '📋' },
-  { id: 'prompts', label: 'Prompts', emoji: '✨' },
-  { id: 'analysis', label: 'Análise', emoji: '📊' },
+  { id: 'blueprint', label: 'Blueprint' },
+  { id: 'prompts', label: 'Prompts' },
+  { id: 'analysis', label: 'Análise' },
 ] as const
 
 export function ResultsPanel({ onGenerateBlueprint, onGeneratePrompts, onGenerateAnalysis }: Props) {
@@ -28,9 +28,6 @@ export function ResultsPanel({ onGenerateBlueprint, onGeneratePrompts, onGenerat
   if (!interviewComplete) {
     return (
       <div className="flex flex-col items-center justify-center h-full text-center px-6 gap-4">
-        <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-indigo-500/10 to-purple-600/10 border border-white/8 flex items-center justify-center">
-          <span className="text-2xl">💬</span>
-        </div>
         <div>
           <p className="text-sm font-medium text-white mb-1">Conclua a entrevista</p>
           <p className="text-xs text-gray-600 leading-relaxed max-w-xs">
@@ -65,7 +62,6 @@ export function ResultsPanel({ onGenerateBlueprint, onGeneratePrompts, onGenerat
                 : 'border-transparent text-gray-600 hover:text-gray-400'
             }`}
           >
-            <span>{tab.emoji}</span>
             {tab.label}
           </button>
         ))}

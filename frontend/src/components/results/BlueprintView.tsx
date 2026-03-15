@@ -31,7 +31,6 @@ export function BlueprintView({ blueprint, isGenerating, onGenerate }: Props) {
   if (!blueprint) {
     return (
       <div className="flex flex-col items-center justify-center h-64 gap-4 text-center">
-        <div className="text-4xl">📋</div>
         <p className="text-sm text-gray-400 font-medium">Nenhum blueprint ainda</p>
         <p className="text-xs text-gray-600 max-w-xs">Conclua a entrevista para gerar um blueprint técnico completo</p>
         <button

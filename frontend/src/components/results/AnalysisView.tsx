@@ -40,7 +40,6 @@ export function AnalysisView({ analysis, isGenerating, onGenerate }: Props) {
   if (!analysis) {
     return (
       <div className="flex flex-col items-center justify-center h-64 gap-4 text-center">
-        <div className="text-4xl">📊</div>
         <p className="text-sm text-gray-400 font-medium">Nenhuma análise ainda</p>
         <p className="text-xs text-gray-600 max-w-xs">Obtenha estimativas de complexidade, referências de mercado e sugestões de melhoria</p>
         <button onClick={onGenerate} className="mt-2 bg-indigo-600 hover:bg-indigo-500 text-white text-sm px-4 py-2 rounded-lg transition-colors">
