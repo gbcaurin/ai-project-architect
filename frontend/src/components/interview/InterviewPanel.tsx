@@ -26,11 +26,11 @@ export function InterviewPanel({ projectId }: Props) {
           <div className="w-5 h-5 rounded-lg bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center">
             <span className="text-white text-[9px] font-bold">AI</span>
           </div>
-          <span className="text-sm font-semibold text-white">AI Architect</span>
+          <span className="text-sm font-semibold text-white">Arquiteto IA</span>
           {interviewComplete && (
             <span className="ml-auto flex items-center gap-1 text-xs text-emerald-400">
               <CheckCircle size={12} />
-              Interview complete
+              Entrevista concluída
             </span>
           )}
         </div>
@@ -41,7 +41,7 @@ export function InterviewPanel({ projectId }: Props) {
         {messages.length === 0 && (
           <div className="text-center py-12">
             <div className="text-3xl mb-3">👋</div>
-            <p className="text-sm text-gray-500">Connecting to AI Architect…</p>
+            <p className="text-sm text-gray-500">Conectando ao Arquiteto IA…</p>
           </div>
         )}
         {messages.map((msg, i) => (
@@ -58,16 +58,16 @@ export function InterviewPanel({ projectId }: Props) {
       <div className="px-5 pb-5 pt-3 flex-shrink-0 border-t border-white/5">
         {interviewComplete ? (
           <div className="text-center py-3">
-            <p className="text-xs text-gray-500">Interview complete — check the results panel →</p>
+            <p className="text-xs text-gray-500">Entrevista concluída — confira o painel de resultados →</p>
           </div>
         ) : (
           <ChatInput
             onSend={sendMessage}
             disabled={isStreaming}
-            placeholder={messages.length < 2 ? "Describe your software idea…" : "Your answer…"}
+            placeholder={messages.length < 2 ? "Descreva sua ideia de software…" : "Sua resposta…"}
           />
         )}
-        <p className="text-[11px] text-gray-700 text-center mt-2">Press Enter to send · Shift+Enter for new line</p>
+        <p className="text-[11px] text-gray-700 text-center mt-2">Enter para enviar · Shift+Enter para nova linha</p>
       </div>
     </div>
   )

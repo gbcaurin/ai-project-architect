@@ -41,29 +41,29 @@ export function PromptPipelineView({ selectedAI, onSelectAI, pipeline, isGenerat
       {isGenerating && !pipeline ? (
         <div className="flex flex-col items-center justify-center h-48 gap-4">
           <div className="w-8 h-8 border-2 border-indigo-500 border-t-transparent rounded-full animate-spin" />
-          <p className="text-sm text-gray-500">Generating prompts for {selectedAI}…</p>
+          <p className="text-sm text-gray-500">Gerando prompts para {selectedAI}…</p>
         </div>
       ) : !pipeline ? (
         <div className="flex flex-col items-center justify-center h-48 gap-4 text-center">
           <div className="text-4xl">✨</div>
-          <p className="text-sm text-gray-400 font-medium">No prompts yet for {selectedAI}</p>
+          <p className="text-sm text-gray-400 font-medium">Nenhum prompt ainda para {selectedAI}</p>
           <button
             onClick={() => onGenerate(selectedAI)}
             className="bg-indigo-600 hover:bg-indigo-500 text-white text-sm px-4 py-2 rounded-lg transition-colors"
           >
-            Generate prompt pipeline
+            Gerar pipeline de prompts
           </button>
         </div>
       ) : (
         <div>
           <div className="flex items-center justify-between mb-4">
-            <p className="text-xs text-gray-600">{pipeline.prompts.length} step pipeline — click any step to expand</p>
+            <p className="text-xs text-gray-600">{pipeline.prompts.length} etapas no pipeline — clique em qualquer etapa para expandir</p>
             <button
               onClick={() => onGenerate(selectedAI)}
               className="flex items-center gap-1 text-xs text-gray-500 hover:text-gray-300 transition-colors"
             >
               <RefreshCw size={12} />
-              Regenerate
+              Regenerar
             </button>
           </div>
           {pipeline.prompts.map(item => (

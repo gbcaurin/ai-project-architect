@@ -14,7 +14,7 @@ interface Props {
 const TABS = [
   { id: 'blueprint', label: 'Blueprint', emoji: '📋' },
   { id: 'prompts', label: 'Prompts', emoji: '✨' },
-  { id: 'analysis', label: 'Analysis', emoji: '📊' },
+  { id: 'analysis', label: 'Análise', emoji: '📊' },
 ] as const
 
 export function ResultsPanel({ onGenerateBlueprint, onGeneratePrompts, onGenerateAnalysis }: Props) {
@@ -32,15 +32,15 @@ export function ResultsPanel({ onGenerateBlueprint, onGeneratePrompts, onGenerat
           <span className="text-2xl">💬</span>
         </div>
         <div>
-          <p className="text-sm font-medium text-white mb-1">Complete the interview</p>
+          <p className="text-sm font-medium text-white mb-1">Conclua a entrevista</p>
           <p className="text-xs text-gray-600 leading-relaxed max-w-xs">
-            Answer the AI Architect's questions about your project. Your blueprint and prompts will appear here.
+            Responda às perguntas do Arquiteto IA sobre seu projeto. Seu blueprint e prompts aparecerão aqui.
           </p>
         </div>
 
         {/* Progress indicators */}
         <div className="flex gap-3 mt-2">
-          {['Blueprint', 'Prompts', 'Analysis'].map(item => (
+          {['Blueprint', 'Prompts', 'Análise'].map(item => (
             <div key={item} className="flex items-center gap-1.5 text-xs text-gray-700">
               <div className="w-1.5 h-1.5 rounded-full bg-gray-700" />
               {item}

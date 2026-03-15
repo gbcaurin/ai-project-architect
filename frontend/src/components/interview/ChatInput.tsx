@@ -40,7 +40,7 @@ export function ChatInput({ onSend, disabled, placeholder }: Props) {
         onKeyDown={onKeyDown}
         onInput={onInput}
         disabled={disabled}
-        placeholder={placeholder || 'Describe your project idea…'}
+        placeholder={placeholder || 'Descreva sua ideia de projeto…'}
         rows={1}
         className="flex-1 bg-transparent text-sm text-white placeholder-gray-600 outline-none resize-none leading-relaxed"
       />

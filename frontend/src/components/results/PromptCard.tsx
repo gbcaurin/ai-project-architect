@@ -39,7 +39,7 @@ export function PromptCard({ item, targetAI }: Props) {
           className="flex items-center gap-1.5 text-xs text-gray-500 hover:text-gray-300 transition-colors px-2 py-1 rounded-lg hover:bg-white/5"
         >
           {copied ? <Check size={12} className="text-emerald-400" /> : <Copy size={12} />}
-          {copied ? 'Copied' : `Copy for ${targetAI}`}
+          {copied ? 'Copiado' : `Copiar para ${targetAI}`}
         </button>
       </div>
 

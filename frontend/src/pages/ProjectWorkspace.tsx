@@ -138,7 +138,7 @@ export default function ProjectWorkspace() {
             <span className="text-white text-[9px] font-bold">AI</span>
           </div>
           <span className="text-sm font-semibold text-white">
-            AI Project Architect
+            Arquiteto de Projetos IA
           </span>
         </div>
         <span className="text-xs text-gray-700 ml-auto hidden md:block">
