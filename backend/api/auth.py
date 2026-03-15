@@ -11,11 +11,12 @@ router = APIRouter(prefix="/api/auth", tags=["auth"])
 
 @router.post("/register", response_model=TokenResponse)
 async def register(req: RegisterRequest, db: AsyncSession = Depends(get_db)):
-    result = await db.execute(select(User).where(User.email == req.email))
+    email = req.email.strip().lower()  # ← normaliza
+    result = await db.execute(select(User).where(User.email == email))
     if result.scalar_one_or_none():
         raise HTTPException(status_code=400, detail="Email already registered")
 
-    user = User(email=req.email, password_hash=hash_password(req.password))
+    user = User(email=email, password_hash=hash_password(req.password))
     db.add(user)
     await db.commit()
     await db.refresh(user)
@@ -33,7 +34,7 @@ async def login(req: LoginRequest, db: AsyncSession = Depends(get_db)):
     user = result.scalar_one_or_none()
 
     if not user or not verify_password(req.password, user.password_hash):
-        raise HTTPException(status_code=401, detail="Invalid credentials")
+        raise HTTPException(status_code=401, detail="Credenciais inválidas")
 
     return TokenResponse(
         token=create_token({"sub": user.id}),

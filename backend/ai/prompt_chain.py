@@ -76,6 +76,10 @@ async def generate_prompt_pipeline(blueprint: str, target_ai: str) -> list[dict]
     result = re.sub(r'^```json\s*', '', result.strip())
     result = re.sub(r'\s*```$', '', result.strip())
 
+    match = re.search(r'\[.*\]', result, re.DOTALL)
+    if match:
+        result = match.group(0)
+
     try:
         return json.loads(result)
     except Exception as e:

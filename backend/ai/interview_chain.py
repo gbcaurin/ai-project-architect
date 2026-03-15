@@ -57,5 +57,7 @@ async def run_interview_chain(messages: list, extracted_data: dict, phase: str):
             content = result.content if hasattr(result, "content") else str(result)
             for word in content.split(" "):
                 yield word + " "
-        except Exception:
-            yield "Desculpe, ocorreu um erro. Pode reformular sua resposta?"
+        except Exception as e2:
+            import traceback
+            traceback.print_exc()  # ← mostra o erro real
+            yield f"Erro: {str(e2)}"

@@ -1,119 +1,133 @@
-import { useEffect, useCallback } from 'react'
-import { useParams, useNavigate } from 'react-router-dom'
-import { useProjectStore } from '../store/projectStore'
-import { projectsApi } from '../api/projects'
-import { generationApi } from '../api/generation'
-import { InterviewPanel } from '../components/interview/InterviewPanel'
-import { ResultsPanel } from '../components/results/ResultsPanel'
-import { AITool } from '../types'
-import { ArrowLeft } from 'lucide-react'
+import { useEffect, useCallback } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import { useProjectStore } from "../store/projectStore";
+import { projectsApi } from "../api/projects";
+import { generationApi } from "../api/generation";
+import { InterviewPanel } from "../components/interview/InterviewPanel";
+import { ResultsPanel } from "../components/results/ResultsPanel";
+import { AITool } from "../types";
+import { ArrowLeft } from "lucide-react";
+import { useAuthStore } from "../store/authStore";
 
 export default function ProjectWorkspace() {
-  const { id } = useParams<{ id: string }>()
-  const navigate = useNavigate()
+  const { id } = useParams<{ id: string }>();
+  const { user } = useAuthStore();
+  const navigate = useNavigate();
   const {
-    setMessages, setInterviewComplete, setPhase,
-    setBlueprint, setPrompts, setAnalysis, setGenerating,
-    interviewComplete, reset
-  } = useProjectStore()
+    setMessages,
+    setInterviewComplete,
+    setPhase,
+    setBlueprint,
+    setPrompts,
+    setAnalysis,
+    setGenerating,
+    interviewComplete,
+    reset,
+  } = useProjectStore();
 
   // Load project on mount
   useEffect(() => {
-    if (!id) return
-    reset()
+    if (!id) return;
+    reset();
 
-    projectsApi.get(id).then(({ data }) => {
-      if (data.messages?.length > 0) {
-        setMessages(data.messages)
-      }
-      if (data.status === 'complete') {
-        setInterviewComplete(true)
-        // Load existing outputs
-        loadExistingOutputs(id)
-      }
-      setPhase(data.interview_phase)
-    }).catch(() => navigate('/app'))
+    projectsApi
+      .get(id)
+      .then(({ data }) => {
+        if (data.messages?.length > 0) {
+          setMessages(data.messages);
+        }
+        if (data.status === "complete") {
+          setInterviewComplete(true);
+          // Load existing outputs
+          loadExistingOutputs(id);
+        }
+        setPhase(data.interview_phase);
+      })
+      .catch(() => navigate("/app"));
 
-    return () => reset()
-  }, [id])
+    return () => reset();
+  }, [id]);
 
   // When interview completes, auto-generate all outputs
   useEffect(() => {
     if (interviewComplete && id) {
-      generateAll(id)
+      generateAll(id);
     }
-  }, [interviewComplete])
+  }, [interviewComplete]);
 
   const loadExistingOutputs = async (projectId: string) => {
     try {
       const [bp, analysis] = await Promise.allSettled([
         generationApi.getBlueprint(projectId),
         generationApi.getAnalysis(projectId),
-      ])
-      if (bp.status === 'fulfilled') setBlueprint(bp.value.data)
-      if (analysis.status === 'fulfilled') setAnalysis(analysis.value.data)
+      ]);
+      if (bp.status === "fulfilled") setBlueprint(bp.value.data);
+      if (analysis.status === "fulfilled") setAnalysis(analysis.value.data);
     } catch {}
-  }
+  };
 
   const generateAll = useCallback(async (projectId: string) => {
-    setGenerating(true)
+    setGenerating(true);
     try {
       const [bp] = await Promise.allSettled([
         generationApi.createBlueprint(projectId),
         generationApi.createAnalysis(projectId),
-      ])
-      if (bp.status === 'fulfilled') setBlueprint(bp.value.data)
+      ]);
+      if (bp.status === "fulfilled") setBlueprint(bp.value.data);
 
       try {
-        const { data: analysis } = await generationApi.getAnalysis(projectId)
-        setAnalysis(analysis)
+        const { data: analysis } = await generationApi.getAnalysis(projectId);
+        setAnalysis(analysis);
       } catch {}
     } finally {
-      setGenerating(false)
+      setGenerating(false);
     }
-  }, [])
+  }, []);
 
   const handleGenerateBlueprint = useCallback(async () => {
-    if (!id) return
-    setGenerating(true)
+    if (!id) return;
+    setGenerating(true);
     try {
-      const { data } = await generationApi.createBlueprint(id)
-      setBlueprint(data)
+      const { data } = await generationApi.createBlueprint(id);
+      setBlueprint(data);
     } finally {
-      setGenerating(false)
+      setGenerating(false);
     }
-  }, [id])
+  }, [id]);
 
-  const handleGeneratePrompts = useCallback(async (ai: AITool) => {
-    if (!id) return
-    setGenerating(true)
-    try {
-      const { data } = await generationApi.createPrompts(id, ai)
-      setPrompts(ai, data)
-    } finally {
-      setGenerating(false)
-    }
-  }, [id])
+  const handleGeneratePrompts = useCallback(
+    async (ai: AITool) => {
+      if (!id) return;
+      setGenerating(true);
+      try {
+        const { data } = await generationApi.createPrompts(id, ai);
+        setPrompts(ai, data);
+      } finally {
+        setGenerating(false);
+      }
+    },
+    [id],
+  );
 
   const handleGenerateAnalysis = useCallback(async () => {
-    if (!id) return
-    setGenerating(true)
+    if (!id) return;
+    setGenerating(true);
     try {
-      const { data } = await generationApi.createAnalysis(id)
-      setAnalysis(data)
+      const { data } = await generationApi.createAnalysis(id);
+      setAnalysis(data);
     } finally {
-      setGenerating(false)
+      setGenerating(false);
     }
-  }, [id])
+  }, [id]);
 
-  if (!id) return null
+  if (!id) return null;
 
   return (
     <div className="flex flex-col h-screen bg-[#0a0a0f]">
       {/* Top bar */}
       <header className="flex items-center gap-3 px-4 py-3 border-b border-white/5 flex-shrink-0">
         <button
-          onClick={() => navigate('/app')}
+          onClick={() => navigate("/app")}
           className="text-gray-600 hover:text-gray-400 transition-colors p-1 rounded-lg hover:bg-white/5"
         >
           <ArrowLeft size={16} />
@@ -123,10 +137,12 @@ export default function ProjectWorkspace() {
           <div className="w-5 h-5 rounded-md bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center">
             <span className="text-white text-[9px] font-bold">AI</span>
           </div>
-          <span className="text-sm font-semibold text-white">AI Project Architect</span>
+          <span className="text-sm font-semibold text-white">
+            AI Project Architect
+          </span>
         </div>
         <span className="text-xs text-gray-700 ml-auto hidden md:block">
-          Chat with AI ← | → Generated outputs
+          {user?.email}
         </span>
       </header>
 
@@ -148,5 +164,5 @@ export default function ProjectWorkspace() {
         </div>
       </div>
     </div>
-  )
+  );
 }

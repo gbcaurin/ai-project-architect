@@ -1,5 +1,4 @@
 from pydantic_settings import BaseSettings
-from typing import Optional
 
 
 class Settings(BaseSettings):
@@ -9,9 +8,7 @@ class Settings(BaseSettings):
 
     DATABASE_URL: str = "sqlite+aiosqlite:///./dev.db"
 
-    LLM_PROVIDER: str = "gemini"
-    GOOGLE_API_KEY: str = ""
-    OPENAI_API_KEY: str = ""
+    GROQ_API_KEY: str = ""
 
     SECRET_KEY: str = "change-me"
     JWT_ALGORITHM: str = "HS256"

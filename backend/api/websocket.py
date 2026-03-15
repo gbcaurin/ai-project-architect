@@ -180,6 +180,8 @@ async def interview_websocket(websocket: WebSocket, project_id: str):
         except WebSocketDisconnect:
             pass
         except Exception as e:
+            import traceback
+            traceback.print_exc()  # ← adiciona essa linha
             try:
                 await websocket.send_json({"type": "error", "content": str(e)})
             except Exception:
