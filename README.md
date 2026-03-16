@@ -12,6 +12,8 @@ cp .env.example .env
 # Edit .env — add your GOOGLE_API_KEY or OPENAI_API_KEY
 
 pip install -r requirements.txt
+# Ativar o ambiente virtual (Windows)
+.\venv\Scripts\Activate.ps1
 uvicorn main:app --reload --port 8000
 ```
 
@@ -32,11 +34,10 @@ npm run dev
 
 | Variable | Description | Default |
 |---|---|---|
-| `LLM_PROVIDER` | `gemini` or `openai` | `gemini` |
-| `GOOGLE_API_KEY` | Gemini API key | — |
-| `OPENAI_API_KEY` | OpenAI API key (if using GPT) | — |
+| `GROQ_API_KEY` | Groq API key (free at console.groq.com/keys) | — |
 | `SECRET_KEY` | JWT signing secret | — |
 | `DATABASE_URL` | SQLAlchemy DB URL | `sqlite+aiosqlite:///./dev.db` |
+| `DEBUG` | Enable debug mode and /docs | `false` |
 
 ---
 
