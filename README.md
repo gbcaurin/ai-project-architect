@@ -48,27 +48,27 @@ pip install -r requirements.txt
 
 **Criar o arquivo .env**
 
-⚠️ **Importante**: Não copie o `.env` de outra pessoa nem use Ctrl+C Ctrl+V para criar o arquivo — isso pode causar problemas de encoding no Windows. Crie pelo terminal:
-```powershell
-# Windows (PowerShell) — dentro da pasta backend
-"GROQ_API_KEY=sua_chave_aqui" | Out-File -FilePath .env -Encoding utf8
-"SECRET_KEY=qualquer-string-aleatoria-aqui" | Add-Content -Path .env -Encoding utf8
-"DATABASE_URL=sqlite+aiosqlite:///./dev.db" | Add-Content -Path .env -Encoding utf8
-"DEBUG=true" | Add-Content -Path .env -Encoding utf8
-```
+Copie o arquivo de exemplo e preencha os valores:
 ```bash
+# Windows
+copy .env.example .env
+
 # Mac/Linux
 cp .env.example .env
-# Edita o .env com seu editor e preenche os valores
 ```
 
-Para obter sua `GROQ_API_KEY` gratuitamente: https://console.groq.com/keys
+Abra o `.env` no VSCode e preencha:
+```env
+GROQ_API_KEY=sua_chave_aqui
+SECRET_KEY=qualquer-string-aleatoria-aqui
+DATABASE_URL=sqlite+aiosqlite:///./dev.db
+DEBUG=true
+```
 
+> Para obter sua `GROQ_API_KEY` gratuitamente: https://console.groq.com/keys
+
+> ⚠️ **Windows**: Se após preencher o `.env` o backend não subir com erro de `Extra inputs are not permitted`, veja a seção de problemas conhecidos abaixo.
 **Verificar se o .env foi criado corretamente**
-```powershell
-Get-Content .env
-```
-Deve aparecer cada variável em sua própria linha, sem espaços ao redor do `=`.
 
 **Rodar o servidor**
 ```bash
