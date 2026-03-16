@@ -155,7 +155,11 @@ async def interview_websocket(websocket: WebSocket, project_id: str):
                     extracted = await extract_project_data(all_messages)
                     await save_project_data(db, project_id, extracted)
 
-                    await websocket.send_json({"type": "done", "phase": "complete"})
+                    await websocket.send_json({
+                        "type": "done", 
+                        "phase": "complete",
+                        "interview_complete": True  # ← estava faltando
+                    })
                     await websocket.send_json({"type": "generating", "message": "Gerando blueprint..."})
 
                     await run_generation(db, project_id)

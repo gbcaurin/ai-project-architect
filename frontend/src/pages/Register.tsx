@@ -24,9 +24,15 @@ export default function Register() {
       setAuth({ id: data.user_id, email: data.email }, data.token);
       navigate("/app");
     } catch (err: any) {
-      setError(err?.response?.data?.detail || "Falha no cadastro");
-    } finally {
-      setLoading(false);
+      const detail = err?.response?.data?.detail;
+      if (Array.isArray(detail)) {
+        // Erro de validação do Pydantic — pega só a mensagem
+        setError(detail.map((e: any) => e.msg).join(", "));
+      } else if (typeof detail === "string") {
+        setError(detail);
+      } else {
+        setError("Registration failed");
+      }
     }
   };
 

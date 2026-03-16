@@ -73,15 +73,28 @@ async def generate_prompt_pipeline(blueprint: str, target_ai: str) -> list[dict]
         "ai_notes": AI_TOOL_NOTES.get(target_ai, "")
     })
 
+    # Remove markdown fences
     result = re.sub(r'^```json\s*', '', result.strip())
     result = re.sub(r'\s*```$', '', result.strip())
 
+    # Extrai o array JSON
     match = re.search(r'\[.*\]', result, re.DOTALL)
     if match:
         result = match.group(0)
 
+    # Remove caracteres de controle inválidos
+    result = re.sub(r'[\x00-\x08\x0b\x0c\x0e-\x1f\x7f]', '', result)
+
+    # Substitui quebras de linha literais dentro de strings por \n
+    result = re.sub(r'(?<=": ")(.*?)(?="[,\n\]])', 
+                    lambda m: m.group(0).replace('\n', '\\n').replace('\r', '\\r').replace('\t', '\\t'),
+                    result, flags=re.DOTALL)
+
     try:
         return json.loads(result)
-    except Exception as e:
-        print(f"Prompt pipeline parse error: {e}")
-        return [{"step": 1, "title": "Error", "prompt": f"Failed to parse: {result[:200]}"}]
+    except Exception:
+        try:
+            return json.loads(result, strict=False)
+        except Exception as e:
+            print(f"Prompt pipeline parse error: {e}")
+            return [{"step": 1, "title": "Error", "prompt": f"Failed to parse: {result[:200]}"}]

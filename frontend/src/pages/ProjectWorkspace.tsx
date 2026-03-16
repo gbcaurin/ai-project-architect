@@ -51,7 +51,7 @@ export default function ProjectWorkspace() {
   // When interview completes, auto-generate all outputs
   useEffect(() => {
     if (interviewComplete && id) {
-      generateAll(id);
+      loadExistingOutputs(id);
     }
   }, [interviewComplete]);
 
