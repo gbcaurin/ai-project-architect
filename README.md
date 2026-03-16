@@ -14,6 +14,7 @@ cp .env.example .env
 pip install -r requirements.txt
 # Ativar o ambiente virtual (Windows)
 .\venv\Scripts\Activate.ps1
+cp backend/.env.example backend/.env
 uvicorn main:app --reload --port 8000
 ```
 
@@ -21,6 +22,7 @@ uvicorn main:app --reload --port 8000
 
 ```bash
 cd frontend
+cp frontend/.env.example frontend/.env
 npm install
 npm run dev
 # Opens at http://localhost:5173
