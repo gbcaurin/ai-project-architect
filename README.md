@@ -8,24 +8,46 @@
 
 ```bash
 cd backend
-cp .env.example .env
-# Edit .env — add your GOOGLE_API_KEY or OPENAI_API_KEY
 
-pip install -r requirements.txt
-# Ativar o ambiente virtual (Windows)
+# 1. Criar o ambiente virtual (apenas na primeira vez)
+python -m venv venv
+
+# 2. Ativar o ambiente virtual (Windows)
 .\venv\Scripts\Activate.ps1
-cp backend/.env.example backend/.env
+
+# Se der erro de permissão, rode antes:
+Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
+
+# Mac/Linux
+source venv/bin/activate
+
+# 3. Instalar dependências (apenas na primeira vez)
+pip install -r requirements.txt
+
+# 4. Copiar o .env
+cp .env.example .env
+# Edita o .env e coloca sua GROQ_API_KEY
+
+# 5. Rodar o servidor
 uvicorn main:app --reload --port 8000
 ```
 
 ### 2. Frontend
-
 ```bash
 cd frontend
-cp frontend/.env.example frontend/.env
+
+# Copiar o .env (Windows)
+copy .env.example .env
+
+# Mac/Linux
+cp .env.example .env
+
+# Instalar dependências (apenas na primeira vez)
 npm install
+
+# Iniciar o servidor
 npm run dev
-# Opens at http://localhost:5173
+# Abre em http://localhost:5173
 ```
 
 ### 3. Open http://localhost:5173 — register, create a project, start the interview!
