@@ -21,11 +21,31 @@ export default function ProjectWorkspace() {
     setPrompts,
     setAnalysis,
     setGenerating,
-    interviewComplete,
     reset,
   } = useProjectStore();
 
-  // Load project on mount
+  const loadExistingOutputs = useCallback(async (projectId: string) => {
+    // Carrega blueprint
+    try {
+      const { data } = await generationApi.getBlueprint(projectId);
+      setBlueprint(data);
+    } catch {}
+
+    // Carrega analysis
+    try {
+      const { data } = await generationApi.getAnalysis(projectId);
+      setAnalysis(data);
+    } catch {}
+
+    // Carrega prompts para todos os AI tools
+    for (const ai of ["claude", "cursor", "lovable", "gpt"] as AITool[]) {
+      try {
+        const { data } = await generationApi.getPrompts(projectId, ai);
+        setPrompts(ai, data);
+      } catch {}
+    }
+  }, []);
+
   useEffect(() => {
     if (!id) return;
     reset();
@@ -36,49 +56,26 @@ export default function ProjectWorkspace() {
         if (data.messages?.length > 0) {
           setMessages(data.messages);
         }
+        setPhase(data.interview_phase);
         if (data.status === "complete") {
           setInterviewComplete(true);
-          // Load existing outputs
           loadExistingOutputs(id);
         }
-        setPhase(data.interview_phase);
       })
       .catch(() => navigate("/app"));
 
     return () => reset();
   }, [id]);
 
-  // When interview completes, auto-generate all outputs
-  useEffect(() => {
-    if (interviewComplete && id) {
-      loadExistingOutputs(id);
-    }
-  }, [interviewComplete]);
-
-  const loadExistingOutputs = async (projectId: string) => {
-    try {
-      const [bp, analysis] = await Promise.allSettled([
-        generationApi.getBlueprint(projectId),
-        generationApi.getAnalysis(projectId),
-      ]);
-      if (bp.status === "fulfilled") setBlueprint(bp.value.data);
-      if (analysis.status === "fulfilled") setAnalysis(analysis.value.data);
-    } catch {}
-  };
-
-  const generateAll = useCallback(async (projectId: string) => {
+  // Quando entrevista completa pela primeira vez, gera tudo
+  const handleInterviewComplete = useCallback(async (projectId: string) => {
     setGenerating(true);
     try {
-      const [bp] = await Promise.allSettled([
+      await Promise.allSettled([
         generationApi.createBlueprint(projectId),
         generationApi.createAnalysis(projectId),
       ]);
-      if (bp.status === "fulfilled") setBlueprint(bp.value.data);
-
-      try {
-        const { data: analysis } = await generationApi.getAnalysis(projectId);
-        setAnalysis(analysis);
-      } catch {}
+      await loadExistingOutputs(projectId);
     } finally {
       setGenerating(false);
     }
@@ -124,7 +121,6 @@ export default function ProjectWorkspace() {
 
   return (
     <div className="flex flex-col h-screen bg-[#0a0a0f]">
-      {/* Top bar */}
       <header className="flex items-center gap-3 px-4 py-3 border-b border-white/5 flex-shrink-0">
         <button
           onClick={() => navigate("/app")}
@@ -146,14 +142,13 @@ export default function ProjectWorkspace() {
         </span>
       </header>
 
-      {/* Main layout */}
       <div className="flex flex-1 overflow-hidden">
-        {/* Interview panel — left */}
         <div className="w-full md:w-[420px] lg:w-[460px] flex-shrink-0 border-r border-white/5 flex flex-col overflow-hidden">
-          <InterviewPanel projectId={id} />
+          <InterviewPanel
+            projectId={id}
+            onInterviewComplete={() => handleInterviewComplete(id)}
+          />
         </div>
-
-        {/* Results panel — right */}
         <div className="flex-1 overflow-hidden flex flex-col bg-[#0c0c16]">
           <ResultsPanel
             projectId={id}
