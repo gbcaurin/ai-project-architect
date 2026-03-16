@@ -7,13 +7,11 @@ echo ""
 
 # Start backend
 cd backend
-uvicorn main:app --reload --port 8000 &
-BACKEND_PID=$!
+uvicorn main:app --reload
 
 # Start frontend  
 cd ../frontend
-npm run dev &
-FRONTEND_PID=$!
+npm run dev
 
 echo "Both servers running. Press Ctrl+C to stop."
-wait $BACKEND_PID $FRONTEND_PID
+
