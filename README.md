@@ -3,16 +3,6 @@
 
 ---
 
-## ⚠️ Requisitos
-
-- **Python 3.12** — versões mais novas (3.13+) causam incompatibilidades com SQLAlchemy e Pydantic
-- **Node.js 18+**
-
-> Para verificar sua versão do Python: `python --version`
-> Para baixar o Python 3.12: https://www.python.org/downloads/release/python-31210/
-
----
-
 ## 🚀 Quick Start
 
 ### 1. Backend
@@ -122,42 +112,12 @@ Abre em http://localhost:5173
 
 ## 🐛 Problemas Conhecidos e Soluções
 
-### Backend não sobe — erro no SQLAlchemy ou Pydantic
-**Causa**: Python 3.13 ou 3.14 tem incompatibilidades com essas libs.
-**Solução**: Use Python 3.12. Recrie o venv com `py -3.12 -m venv venv`.
-
-### Erro `Extra inputs are not permitted` no Settings
-**Causa**: O arquivo `.env` tem encoding errado ou falta quebra de linha entre variáveis — geralmente causado por copiar o arquivo de outra máquina.
-**Solução**: Delete o `.env` e crie novamente pelo terminal PowerShell usando o comando `Out-File` mostrado acima.
-
-### Erro `bcrypt` — `module has no attribute '__about__'`
-**Causa**: Versão incompatível do bcrypt com passlib.
-**Solução**:
-```bash
-pip uninstall bcrypt -y
-pip install bcrypt==4.0.1
-```
-
-### Erro CORS — `No 'Access-Control-Allow-Origin' header`
-**Causa**: O `allow_origins=["*"]` com `allow_credentials=True` é inválido pelo padrão CORS.
-**Solução**: Use a origem exata no `main.py`:
-```python
-allow_origins=["http://localhost:5173"]
-```
-
 ### LLM retorna erro 429 — quota excedida
 **Causa**: Cota gratuita do Groq atingida.
 **Solução**: Gere uma nova chave em https://console.groq.com/keys e atualize o `.env`.
 
-### LLM retorna `404 NOT_FOUND` para modelo Gemini
-**Causa**: Modelo `gemini-1.5-flash` descontinuado.
-**Solução**: Use `gemini-2.0-flash` no `ai/llm_factory.py` — ou mude para Groq conforme configurado neste projeto.
-
 ### Aviso `Core Pydantic V1 functionality isn't compatible with Python 3.14`
 Apenas um warning, não quebra o funcionamento. Para eliminar definitivamente, use Python 3.12.
-
-### Frontend — token perdido ao atualizar a página
-O token é salvo no `localStorage` mas o objeto `user` some após refresh. Resolvido no `App.tsx` com chamada ao `/api/auth/me` na inicialização.
 
 ---
 
@@ -183,9 +143,3 @@ backend/
 - **Streaming WebSocket** — streaming de tokens em tempo real para uma conversa natural
 
 ---
-
-## 🚢 Deploy
-
-- **Backend**: Railway, Render ou Fly.io — `uvicorn main:app --host 0.0.0.0 --port $PORT`
-- **Frontend**: Vercel ou Netlify — configure `VITE_API_URL` e `VITE_WS_URL` nas variáveis de ambiente
-- **Banco de dados**: Troque para PostgreSQL alterando `DATABASE_URL` para uma connection string Postgres
