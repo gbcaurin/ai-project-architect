@@ -13,10 +13,10 @@ cd backend
 **Criar o ambiente virtual com Python 3.12 (apenas na primeira vez)**
 ```bash
 # Windows
-py -3.12 -m venv venv
+python -m venv venv
 
 # Mac/Linux
-python3.12 -m venv venv
+python -m venv venv
 ```
 
 **Ativar o ambiente virtual**
