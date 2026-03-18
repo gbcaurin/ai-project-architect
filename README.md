@@ -57,8 +57,7 @@ DEBUG=true
 
 > Para obter sua `GROQ_API_KEY` gratuitamente: https://console.groq.com/keys
 
-> ⚠️ **Windows**: Se após preencher o `.env` o backend não subir com erro de `Extra inputs are not permitted`, veja a seção de problemas conhecidos abaixo.
-**Verificar se o .env foi criado corretamente**
+> ⚠️ **Windows**: Se após preencher o `.env` o backend não subir com erro de `Extra inputs are not permitted` **Verificar se o .env foi criado corretamente**
 
 **Rodar o servidor**
 ```bash
