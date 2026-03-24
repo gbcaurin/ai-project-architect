@@ -1,44 +1,75 @@
-# AI Project Architect
+# 🏗️ Curio AI
+
 > Transforme ideias vagas de software em blueprints técnicos completos através de uma entrevista adaptativa com IA.
+
+![Python](https://img.shields.io/badge/Python-3.12-3776AB?style=flat&logo=python&logoColor=white)
+![FastAPI](https://img.shields.io/badge/FastAPI-0.100+-009688?style=flat&logo=fastapi&logoColor=white)
+![React](https://img.shields.io/badge/React-18-61DAFB?style=flat&logo=react&logoColor=black)
+![TypeScript](https://img.shields.io/badge/TypeScript-5-3178C6?style=flat&logo=typescript&logoColor=white)
+![LangChain](https://img.shields.io/badge/LangChain-AI-1C3C3C?style=flat&logo=chainlink&logoColor=white)
+![License](https://img.shields.io/badge/License-MIT-green?style=flat)
 
 ---
 
-## 🚀 Quick Start
+## ✨ O que é?
+
+O **Curio AI** é uma aplicação full stack que conduz o usuário por uma **entrevista adaptativa com IA** para extrair os requisitos de um projeto de software e gerar automaticamente:
+
+- 📄 **Blueprint técnico** em Markdown (arquitetura, banco de dados, roadmap)
+- 🤖 **Prompts prontos** otimizados para Claude Code, Cursor, Lovable, GPT e Gemini
+- 📊 **Análise de complexidade** com estimativa de tempo, tamanho de equipe, produtos similares e modelos de monetização
+
+---
+
+## 🚀 Stack
+
+| Camada | Tecnologias |
+|--------|------------|
+| **Frontend** | React · Vite · TypeScript · Tailwind CSS · Zustand |
+| **Backend** | Python · FastAPI · LangChain · SQLAlchemy · Pydantic |
+| **IA** | Groq API (LLaMA) · LangChain Chains |
+| **Banco de Dados** | SQLite (dev) · compatível com PostgreSQL |
+| **Comunicação** | REST API · WebSocket (streaming de tokens) |
+| **Auth** | JWT |
+
+---
+
+## ⚙️ Como rodar localmente
+
+### Pré-requisitos
+
+- Python 3.12+
+- Node.js 18+
+- Chave da [Groq API](https://console.groq.com/keys) (gratuita)
+
+---
 
 ### 1. Backend
+
 ```bash
 cd backend
 ```
 
-**Criar o ambiente virtual com Python 3.12 (apenas na primeira vez)**
+**Criar e ativar ambiente virtual**
 ```bash
 # Windows
 python -m venv venv
-
-# Mac/Linux
-python -m venv venv
-```
-
-**Ativar o ambiente virtual**
-```bash
-# Windows
 .\venv\Scripts\Activate.ps1
 
-# Se der erro de permissão no Windows, rode antes:
-Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
-
 # Mac/Linux
+python -m venv venv
 source venv/bin/activate
 ```
 
-**Instalar dependências (apenas na primeira vez)**
+> ⚠️ Windows: se der erro de permissão, rode antes:
+> `Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser`
+
+**Instalar dependências**
 ```bash
 pip install -r requirements.txt
 ```
 
-**Criar o arquivo .env**
-
-Copie o arquivo de exemplo e preencha os valores:
+**Configurar variáveis de ambiente**
 ```bash
 # Windows
 copy .env.example .env
@@ -47,17 +78,13 @@ copy .env.example .env
 cp .env.example .env
 ```
 
-Abra o `.env` no VSCode e preencha:
+Abra o `.env` e preencha:
 ```env
 GROQ_API_KEY=sua_chave_aqui
-SECRET_KEY=qualquer-string-aleatoria-aqui
+SECRET_KEY=qualquer-string-aleatoria
 DATABASE_URL=sqlite+aiosqlite:///./dev.db
 DEBUG=true
 ```
-
-> Para obter sua `GROQ_API_KEY` gratuitamente: https://console.groq.com/keys
-
-> ⚠️ **Windows**: Se após preencher o `.env` o backend não subir com erro de `Extra inputs are not permitted` **Verificar se o .env foi criado corretamente**
 
 **Rodar o servidor**
 ```bash
@@ -67,78 +94,63 @@ uvicorn main:app --reload --port 8000
 ---
 
 ### 2. Frontend
+
 ```bash
 cd frontend
-```
-
-**Instalar dependências (apenas na primeira vez)**
-```bash
 npm install
-```
-
-**Criar o .env**
-```bash
-# Windows
-copy .env.example .env
-
-# Mac/Linux
-cp .env.example .env
-```
-
-**Iniciar o servidor**
-```bash
+cp .env.example .env   # ou copy no Windows
 npm run dev
 ```
 
-Abre em http://localhost:5173
+Acesse **http://localhost:5173** — crie uma conta, abra um projeto e inicie a entrevista!
 
 ---
 
-### 3. Acesse http://localhost:5173 — crie uma conta, abra um projeto e inicie a entrevista!
+## 🔑 Variáveis de Ambiente
+
+| Variável | Descrição | Obrigatório |
+|----------|-----------|:-----------:|
+| `GROQ_API_KEY` | Chave da API Groq — [obter aqui](https://console.groq.com/keys) | ✅ |
+| `SECRET_KEY` | String aleatória para assinatura JWT | ✅ |
+| `DATABASE_URL` | URL SQLAlchemy — padrão: SQLite local | ❌ |
+| `DEBUG` | Ativa modo debug e rota `/docs` | ❌ |
 
 ---
 
-## ⚙️ Variáveis de Ambiente
+## 🏗️ Arquitetura do Projeto
 
-| Variável | Descrição | Padrão |
-|---|---|---|
-| `GROQ_API_KEY` | Chave da API Groq (gratuita em console.groq.com/keys) | — |
-| `SECRET_KEY` | Segredo para assinatura JWT — coloque qualquer string aleatória | — |
-| `DATABASE_URL` | URL do banco SQLAlchemy | `sqlite+aiosqlite:///./dev.db` |
-| `DEBUG` | Ativa modo debug e rota /docs | `false` |
-
----
-
-## 🐛 Problemas Conhecidos e Soluções
-
-### LLM retorna erro 429 — quota excedida
-**Causa**: Cota gratuita do Groq atingida.
-**Solução**: Gere uma nova chave em https://console.groq.com/keys e atualize o `.env`.
-
-### Aviso `Core Pydantic V1 functionality isn't compatible with Python 3.14`
-Apenas um warning, não quebra o funcionamento. Para eliminar definitivamente, use Python 3.12.
-
----
-
-## 🏗️ Arquitetura
 ```
-frontend/          React + Vite + Tailwind + Zustand
-backend/
-  api/             Rotas FastAPI (auth, projects, generation, websocket)
-  ai/              Chains LangChain (interview, blueprint, prompt, analysis, extraction)
-  models/          Models SQLAlchemy
-  schemas/         Schemas Pydantic
-  core/            Config, auth, database
+ai-project-architect/
+├── frontend/               # React + Vite + Tailwind + Zustand
+└── backend/
+    ├── api/                # Rotas FastAPI (auth, projects, generation, websocket)
+    ├── ai/                 # Chains LangChain (interview, blueprint, prompt, analysis)
+    ├── models/             # Models SQLAlchemy
+    ├── schemas/            # Schemas Pydantic
+    └── core/               # Config, auth, database
 ```
 
 ---
 
-## ✨ Features
+## 🐛 Problemas Conhecidos
 
-- **Motor de Entrevista IA** — conversa adaptativa que extrai os requisitos do seu projeto
-- **Gerador de Blueprint** — blueprint técnico completo em Markdown (arquitetura, DB, roadmap)
-- **Pipeline de Prompts** — prompts passo a passo otimizados para Claude Code, Cursor, Lovable e GPT
-- **Análise de Complexidade** — estimativa de tempo, tamanho de equipe, produtos similares e modelos de monetização
-- **Streaming WebSocket** — streaming de tokens em tempo real para uma conversa natural
+**Erro 429 — quota excedida (Groq)**
+> Gere uma nova chave em https://console.groq.com/keys e atualize o `.env`.
+
+**Warning `Core Pydantic V1 functionality isn't compatible with Python 3.14`**
+> Apenas um aviso, não afeta o funcionamento. Use Python 3.12 para eliminar.
+
+**`Extra inputs are not permitted` ao subir o backend (Windows)**
+> Verifique se o arquivo `.env` foi criado corretamente e não contém espaços ao redor do `=`.
 
 ---
+
+## 👨‍💻 Autor
+
+**Gabriel Caurin de Souza**
+**Gabriel Santucci de Novaes**
+**Enrico Locateli Costa**
+
+---
+
+*Projeto desenvolvido como parte de Hackathon.*
