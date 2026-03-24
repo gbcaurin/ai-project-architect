@@ -148,7 +148,9 @@ ai-project-architect/
 ## 👨‍💻 Autor
 
 **Gabriel Caurin de Souza**
+
 **Gabriel Santucci de Novaes**
+
 **Enrico Locateli Costa**
 
 ---
