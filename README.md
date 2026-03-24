@@ -145,7 +145,7 @@ ai-project-architect/
 
 ---
 
-## 👨‍💻 Autor
+## 👨‍💻 Autores
 
 **Gabriel Caurin de Souza**
 
